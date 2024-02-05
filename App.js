@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View, FlatList, StatusBar } from "react-native";
-import TodoItem from "./src/components/TodoItem";
+import TodoItem from "./src/components/DeleteTodo";
 import AddTodo from "./src/components/AddTodo";
 
 /**
@@ -9,22 +9,22 @@ import AddTodo from "./src/components/AddTodo";
  */
 const App = () => {
   const [todos, setTodos] = useState([
-    { text: "Faire son CV", key: "1" },
-    { text: "Postuler sur Hello Work", key: "2" },
-    { text: "Mise en place du portfollio", key: "3" },
-    { text: "Préparation des entretiens", key: "4" },
-    { text: "Rester motivé", key: "5" },
+    { text: "Faire son CV", id: "1" },
+    { text: "Postuler sur Hello Work", id: "2" },
+    { text: "Mise en place du portfollio", id: "3" },
+    { text: "Préparation des entretiens", id: "4" },
+    { text: "Rester motivé", id: "5" },
   ]);
 
   const addTodo = (text) => {
     setTodos((prevTodos) => [
-      { text: text, key: Math.random().toString() },
+      { text: text, id: Math.random().toString() },
       ...prevTodos,
     ]);
   };
 
-  const deleteTodo = (key) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.key !== key));
+  const deleteTodo = (id) => {
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   };
 
   return (
@@ -37,7 +37,7 @@ const App = () => {
             // Ici je passe la fonction deleteTodo en tant que prop onDeleteTodo
             <TodoItem todo={item} onDeleteTodo={deleteTodo} />
           )}
-          keyExtractor={(item) => item.key}
+          keyExtractor={(item) => item.id}
         />
       </View>
       <StatusBar style="auto" />

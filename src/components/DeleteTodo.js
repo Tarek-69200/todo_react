@@ -8,7 +8,7 @@ const TodoItem = ({ todo, onDeleteTodo }) => {
         {todo.text}
       </Text>
       <TouchableOpacity
-        onPress={() => onDeleteTodo(todo.key)}
+        onPress={() => onDeleteTodo(todo.id)}
         style={styles.deleteButton}
       >
         <Text style={styles.deleteButtonText}>Supprimer</Text>
