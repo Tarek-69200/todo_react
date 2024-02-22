@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { StyleSheet, View, FlatList, StatusBar } from "react-native";
 import TodoItem from "./src/components/DeleteTodo";
 import AddTodo from "./src/components/AddTodo";
+import configSingleton from "./settings/config";
+
+
 
 /**
  * Represents the main component of the Todo List application.
