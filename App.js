@@ -1,33 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, FlatList, StatusBar } from "react-native";
 import TodoItem from "./src/components/DeleteTodo";
 import AddTodo from "./src/components/AddTodo";
-import configSingleton from "./settings/config";
+import { saveTasks, getTasks,} from "./src/utils/storage";
 
-
-
-/**
- * Represents the main component of the Todo List application.
- * @returns {JSX.Element} The rendered component.
- */
 const App = () => {
-  const [todos, setTodos] = useState([
-    { text: "Faire son CV", id: "1" },
-    { text: "Postuler sur Hello Work", id: "2" },
-    { text: "Mise en place du portfollio", id: "3" },
-    { text: "Préparation des entretiens", id: "4" },
-    { text: "Rester motivé", id: "5" },
-  ]);
+  const [todos, setTodos] = useState([]);
 
-  const addTodo = (text) => {
-    setTodos((prevTodos) => [
-      { text: text, id: Math.random().toString() },
-      ...prevTodos,
-    ]);
+  
+  useEffect(() => {
+    const loadTasks = async () => {
+      const storedTasks = await getTasks();
+      setTodos(storedTasks);
+    };
+    loadTasks();
+  }, []);
+
+  const addTodo = async (text) => {
+    const newTodo = { text, id: Math.random().toString() };
+    const updatedTodos = [newTodo, ...todos];
+    setTodos(updatedTodos);
+    await saveTasks(updatedTodos); 
   };
 
-  const deleteTodo = (id) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+  const handleDeleteTodo = async (id) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(updatedTodos);
+    await saveTasks(updatedTodos); 
   };
 
   return (
@@ -37,8 +36,7 @@ const App = () => {
         <FlatList
           data={todos}
           renderItem={({ item }) => (
-            // Ici je passe la fonction deleteTodo en tant que prop onDeleteTodo
-            <TodoItem todo={item} onDeleteTodo={deleteTodo} />
+            <TodoItem todo={item} onDeleteTodo={handleDeleteTodo} />
           )}
           keyExtractor={(item) => item.id}
         />
